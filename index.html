@@ -54,26 +54,27 @@
     .controls {
       margin-top: 1rem;
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      width: 100%;
       gap: 1rem;
+      width: 100%;
+      position: fixed;
+      bottom: 10px; /* Fixa os botões na parte inferior da página */
     }
     button {
-      padding: 0.8rem 1.2rem;
+      padding: 1rem;
       font-size: 1.5rem;
       border: none;
       border-radius: 6px;
       background-color: #007bff;
       color: white;
       cursor: pointer;
-      width: 30%; /* Ajustado para os botões caberem na tela */
+      width: 12%; /* Ajustado para todos os botões ficarem lado a lado */
     }
     button:hover {
       background-color: #0056b3;
     }
     button i {
-      font-size: 1.5rem; /* Ajuste para os ícones ficarem bem dimensionados */
+      font-size: 1.5rem;
     }
     @media (max-width: 600px) {
       body {
@@ -106,14 +107,11 @@
   </table>
 
   <div class="controls">
-    <button onclick="addPlayer()"><i>+</i></button>
-    <button onclick="undo()"><i>⟲</i></button>
-    <button onclick="resetTable()"><i>🗑️</i></button>
-  </div>
-
-  <div class="controls">
-    <button onclick="removePlayer()"><i>-</i></button>
-    <button onclick="redo()"><i>⟳</i></button>
+    <button onclick="addPlayer()">+</button>
+    <button onclick="removePlayer()">-</button>
+    <button onclick="undo()">⟲</button>
+    <button onclick="redo()">⟳</button>
+    <button onclick="resetTable()">🗑️</button>
   </div>
 
   <script>
