@@ -106,12 +106,15 @@
     <button onclick="resetTable()">Limpar</button>
     <button onclick="undo()">⟲ Desfazer</button>
     <button onclick="redo()">⟳ Refazer</button>
+    <button onclick="addPlayer()">Adicionar Jogador</button>
+    <button onclick="removePlayer()">Remover Jogador</button>
   </div>
 
   <script>
     const tableBody = document.getElementById('player-table');
     const history = [];
     let historyIndex = -1;
+    let playerCount = 3; // Começa com 3 jogadores
 
     function createRow(index) {
       const tr = document.createElement('tr');
@@ -229,8 +232,24 @@
       }
     }
 
-    // Inicializar com 8 jogadores
-    for (let i = 0; i < 8; i++) {
+    function addPlayer() {
+      if (playerCount < 8) { // Limitar a 8 jogadores
+        tableBody.appendChild(createRow(playerCount));
+        playerCount++;
+        updateTotals();
+      }
+    }
+
+    function removePlayer() {
+      if (playerCount > 1) { // Garantir que pelo menos 1 jogador permanece
+        tableBody.deleteRow(playerCount - 1);
+        playerCount--;
+        updateTotals();
+      }
+    }
+
+    // Inicializar com 3 jogadores
+    for (let i = 0; i < playerCount; i++) {
       tableBody.appendChild(createRow(i));
     }
     loadFromLocal();
