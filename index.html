@@ -1,283 +1,315 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contagem de Poker</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f2f2f2;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-      box-sizing: border-box;
-    }
-    .content {
-      width: 100%;
-      max-width: 800px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 1rem;
-    }
-    th, td {
-      padding: 0.4rem; /* Diminuído o padding das células */
-      font-size: 0.9rem; /* Reduzido o tamanho da fonte */
-      text-align: center; /* Centralizado o texto */
-      border-bottom: 1px solid #eee;
-    }
-    input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 0.8rem;
-      font-size: 1rem; /* Ajustado o tamanho da fonte dos campos */
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-    tfoot td {
-      font-weight: bold;
-      font-size: 1rem; /* Tamanho da fonte ajustado */
-    }
-    .controls {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      width: 100%;
-      padding: 0 1rem;
-      box-sizing: border-box;
-      position: fixed;
-      bottom: 10px;
-      left: 0;
-      background: #f2f2f2;
-    }
-    button {
-      padding: 1rem;
-      font-size: 1.5rem;
-      border: none;
-      border-radius: 6px;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-      width: 18%;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    button i {
-      font-size: 1.5rem;
-    }
-    @media (max-width: 600px) {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contagem de Poker</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      .content {
+        width: 100%;
+        max-width: 800px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+      }
+      th,
+      td {
+        padding: 0.4rem; /* Diminuído o padding das células */
+        font-size: 0.9rem; /* Reduzido o tamanho da fonte */
+        text-align: center; /* Centralizado o texto */
+        border-bottom: 1px solid #eee;
+      }
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem; /* Ajustado o tamanho da fonte dos campos */
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+      tfoot td {
+        font-weight: bold;
+        font-size: 1rem; /* Tamanho da fonte ajustado */
+      }
+      .controls {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0 1rem;
+        box-sizing: border-box;
+        position: fixed;
+        bottom: 10px;
+        left: 0;
+        background: #f2f2f2;
+      }
       button {
-        font-size: 1.2rem;
-        padding: 0.7rem 1.4rem;
+        padding: 1rem;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 6px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
         width: 18%;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="content">
-    <table>
-      <thead>
-        <tr><th>Nome</th><th>Balance</th></tr>
-      </thead>
-      <tbody id="player-table">
-        <!-- Gerado por JS -->
-      </tbody>
-      <tfoot>
-        <tr><td>Total Positivo</td><td id="total-positivo">0</td></tr>
-        <tr><td>Total Negativo</td><td id="total-negativo">0</td></tr>
-        <tr><td>Total Diferença</td><td id="total-diferenca">0</td></tr>
-      </tfoot>
-    </table>
-
-    <div class="controls">
-      <button onclick="addPlayer()">+</button>
-      <button onclick="removePlayer()">-</button>
-      <button onclick="undo()">⟲</button>
-      <button onclick="redo()">⟳</button>
-      <button onclick="resetTable()">🗑️</button>
-    </div>
-  </div>
-
-  <script>
-    const tableBody = document.getElementById('player-table');
-    const history = [];
-    let historyIndex = -1;
-    let playerCount = 3; // Começa com 3 jogadores
-    let maxPlayers = 8; // Limite de jogadores
-
-    function createRow(index) {
-      const tr = document.createElement('tr');
-
-      const tdNome = document.createElement('td');
-      const inputNome = document.createElement('input');
-      inputNome.type = 'text';
-      inputNome.placeholder = `Jogador ${index + 1}`;
-      inputNome.oninput = () => { saveState(); updateTotals(); };
-      tdNome.appendChild(inputNome);
-
-      const tdBalance = document.createElement('td');
-      const inputBalance = document.createElement('input');
-      inputBalance.type = 'number';
-      inputBalance.inputMode = 'decimal';
-      inputBalance.value = '';
-      inputBalance.oninput = () => { saveState(); updateTotals(); };
-      tdBalance.appendChild(inputBalance);
-
-      tr.appendChild(tdNome);
-      tr.appendChild(tdBalance);
-
-      return tr;
-    }
-
-    function updateTotals() {
-      const inputs = tableBody.querySelectorAll('input[type="number"]');
-      let totalPositivo = 0;
-      let totalNegativo = 0;
-
-      inputs.forEach(input => {
-        const val = parseFloat(input.value);
-        if (!isNaN(val)) {
-          if (val > 0) totalPositivo += val;
-          else totalNegativo += val;
+      button:hover {
+        background-color: #0056b3;
+      }
+      button i {
+        font-size: 1.5rem;
+      }
+      @media (max-width: 600px) {
+        button {
+          font-size: 1.2rem;
+          padding: 0.7rem 1.4rem;
+          width: 18%;
         }
-      });
-
-      document.getElementById('total-positivo').textContent = totalPositivo.toFixed(2);
-      document.getElementById('total-negativo').textContent = totalNegativo.toFixed(2);
-      document.getElementById('total-diferenca').textContent = (totalPositivo + totalNegativo).toFixed(2);
-
-      saveToLocal();
-    }
-
-    function resetTable() {
-      const inputs = tableBody.querySelectorAll('input');
-      inputs.forEach(input => input.value = '');
-      saveState();
-      updateTotals();
-    }
-
-    function saveState() {
-      const state = Array.from(tableBody.querySelectorAll('tr')).map(tr => {
-        const inputs = tr.querySelectorAll('input');
-        return {
-          nome: inputs[0].value,
-          balance: inputs[1].value
-        };
-      });
-
-      history.splice(historyIndex + 1);
-      history.push(JSON.stringify(state));
-      historyIndex++;
-    }
-
-    function applyState(stateJSON) {
-      const state = JSON.parse(stateJSON);
-      state.forEach((row, i) => {
-        const tr = tableBody.children[i];
-        const inputs = tr.querySelectorAll('input');
-        inputs[0].value = row.nome;
-        inputs[1].value = row.balance;
-      });
-      updateTotals();
-    }
-
-    function undo() {
-      if (historyIndex > 0) {
-        historyIndex--;
-        applyState(history[historyIndex]);
       }
-    }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="player-table">
+          <!-- Gerado por JS -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total Positivo</td>
+            <td id="total-positivo">0</td>
+          </tr>
+          <tr>
+            <td>Total Negativo</td>
+            <td id="total-negativo">0</td>
+          </tr>
+          <tr>
+            <td>Total Diferença</td>
+            <td id="total-diferenca">0</td>
+          </tr>
+        </tfoot>
+      </table>
 
-    function redo() {
-      if (historyIndex < history.length - 1) {
-        historyIndex++;
-        applyState(history[historyIndex]);
-      }
-    }
+      <div class="controls">
+        <button onclick="addPlayer()">+</button>
+        <button onclick="removePlayer()">-</button>
+        <button onclick="undo()">⟲</button>
+        <button onclick="redo()">⟳</button>
+        <button onclick="resetTable()">🗑️</button>
+      </div>
+    </div>
 
-    function saveToLocal() {
-      const current = Array.from(tableBody.querySelectorAll('tr')).map(tr => {
-        const inputs = tr.querySelectorAll('input');
-        return {
-          nome: inputs[0].value,
-          balance: inputs[1].value
+    <script>
+      const tableBody = document.getElementById("player-table");
+      const history = [];
+      let historyIndex = -1;
+      let playerCount = 3; // Começa com 3 jogadores
+      let maxPlayers = 7; // Limite de jogadores
+
+      function createRow(index) {
+        const tr = document.createElement("tr");
+
+        const tdNome = document.createElement("td");
+        const inputNome = document.createElement("input");
+        inputNome.type = "text";
+        inputNome.placeholder = `Jogador ${index + 1}`;
+        inputNome.oninput = () => {
+          saveState();
+          updateTotals();
         };
-      });
-      localStorage.setItem('poker_tracker', JSON.stringify(current));
-    }
+        tdNome.appendChild(inputNome);
 
-    function loadFromLocal() {
-      const saved = localStorage.getItem('poker_tracker');
-      if (saved) {
-        const state = JSON.parse(saved);
-        state.forEach((row, i) => {
-          const tr = tableBody.children[i];
-          const inputs = tr.querySelectorAll('input');
-          inputs[0].value = row.nome;
-          inputs[1].value = row.balance;
+        const tdBalance = document.createElement("td");
+        const inputBalance = document.createElement("input");
+        inputBalance.type = "number";
+        inputBalance.inputMode = "decimal";
+        inputBalance.value = "";
+        inputBalance.oninput = () => {
+          saveState();
+          updateTotals();
+        };
+        tdBalance.appendChild(inputBalance);
+
+        tr.appendChild(tdNome);
+        tr.appendChild(tdBalance);
+
+        return tr;
+      }
+
+      function updateTotals() {
+        const inputs = tableBody.querySelectorAll('input[type="number"]');
+        let totalPositivo = 0;
+        let totalNegativo = 0;
+
+        inputs.forEach((input) => {
+          const val = parseFloat(input.value);
+          if (!isNaN(val)) {
+            if (val > 0) totalPositivo += val;
+            else totalNegativo += val;
+          }
         });
+
+        document.getElementById("total-positivo").textContent =
+          totalPositivo.toFixed(2);
+        document.getElementById("total-negativo").textContent =
+          totalNegativo.toFixed(2);
+        document.getElementById("total-diferenca").textContent = (
+          totalPositivo + totalNegativo
+        ).toFixed(2);
+
+        saveToLocal();
+      }
+
+      function resetTable() {
+        const inputs = tableBody.querySelectorAll("input");
+        inputs.forEach((input) => (input.value = ""));
         saveState();
         updateTotals();
       }
-    }
 
-    function addPlayer() {
-      if (playerCount < maxPlayers) { // Limitar a 8 jogadores
-        tableBody.appendChild(createRow(playerCount));
-        playerCount++;
+      function saveState() {
+        const state = Array.from(tableBody.querySelectorAll("tr")).map((tr) => {
+          const inputs = tr.querySelectorAll("input");
+          return {
+            nome: inputs[0].value,
+            balance: inputs[1].value,
+          };
+        });
+
+        history.splice(historyIndex + 1);
+        history.push(JSON.stringify(state));
+        historyIndex++;
+      }
+
+      function applyState(stateJSON) {
+        const state = JSON.parse(stateJSON);
+        state.forEach((row, i) => {
+          const tr = tableBody.children[i];
+          const inputs = tr.querySelectorAll("input");
+          inputs[0].value = row.nome;
+          inputs[1].value = row.balance;
+        });
         updateTotals();
       }
-    }
 
-    function removePlayer() {
-      if (playerCount > 3) { // Impedir remoção se houver apenas 3 jogadores
-        tableBody.deleteRow(playerCount - 1);
-        playerCount--;
-        updateTotals();
+      function undo() {
+        if (historyIndex > 0) {
+          historyIndex--;
+          applyState(history[historyIndex]);
+        }
       }
-    }
 
-    // Inicializar com 3 jogadores
-    for (let i = 0; i < playerCount; i++) {
-      tableBody.appendChild(createRow(i));
-    }
-    loadFromLocal();
-
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
-        e.preventDefault();
-        undo();
-      } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'z') {
-        e.preventDefault();
-        redo();
+      function redo() {
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          applyState(history[historyIndex]);
+        }
       }
-    });
-  </script>
-</body>
+
+      function saveToLocal() {
+        const current = Array.from(tableBody.querySelectorAll("tr")).map(
+          (tr) => {
+            const inputs = tr.querySelectorAll("input");
+            return {
+              nome: inputs[0].value,
+              balance: inputs[1].value,
+            };
+          }
+        );
+        localStorage.setItem("poker_tracker", JSON.stringify(current));
+      }
+
+      function loadFromLocal() {
+        const saved = localStorage.getItem("poker_tracker");
+        if (saved) {
+          const state = JSON.parse(saved);
+          state.forEach((row, i) => {
+            const tr = tableBody.children[i];
+            const inputs = tr.querySelectorAll("input");
+            inputs[0].value = row.nome;
+            inputs[1].value = row.balance;
+          });
+          saveState();
+          updateTotals();
+        }
+      }
+
+      function addPlayer() {
+        if (playerCount < maxPlayers) {
+          // Limitar a 8 jogadores
+          tableBody.appendChild(createRow(playerCount));
+          playerCount++;
+          updateTotals();
+        }
+      }
+
+      function removePlayer() {
+        if (playerCount > 3) {
+          // Impedir remoção se houver apenas 3 jogadores
+          tableBody.deleteRow(playerCount - 1);
+          playerCount--;
+          updateTotals();
+        }
+      }
+
+      // Inicializar com 3 jogadores
+      for (let i = 0; i < playerCount; i++) {
+        tableBody.appendChild(createRow(i));
+      }
+      loadFromLocal();
+
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.key === "z" && !e.shiftKey) {
+          e.preventDefault();
+          undo();
+        } else if (
+          (e.ctrlKey || e.metaKey) &&
+          e.shiftKey &&
+          e.key.toLowerCase() === "z"
+        ) {
+          e.preventDefault();
+          redo();
+        }
+      });
+    </script>
+  </body>
 </html>
