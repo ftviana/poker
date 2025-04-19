@@ -34,19 +34,17 @@
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       margin-bottom: 1rem;
-      max-height: 50%;
-      overflow-y: auto;
-      transition: max-height 0.3s ease;
     }
     th, td {
-      padding: 0.8rem;
-      text-align: left;
+      padding: 0.4rem; /* Diminuído o padding das células */
+      font-size: 0.9rem; /* Reduzido o tamanho da fonte */
+      text-align: center; /* Centralizado o texto */
       border-bottom: 1px solid #eee;
     }
     input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
+      padding: 0.8rem;
+      font-size: 1rem; /* Ajustado o tamanho da fonte dos campos */
       border: 1px solid #ccc;
       border-radius: 6px;
       box-sizing: border-box;
@@ -61,7 +59,7 @@
     }
     tfoot td {
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1rem; /* Tamanho da fonte ajustado */
     }
     .controls {
       margin-top: 1rem;
@@ -132,17 +130,6 @@
     let historyIndex = -1;
     let playerCount = 3; // Começa com 3 jogadores
     let maxPlayers = 8; // Limite de jogadores
-
-    // Calcular a altura da tabela
-    function adjustTableHeight() {
-      const controlHeight = document.querySelector('.controls').offsetHeight;
-      const headerHeight = document.querySelector('thead').offsetHeight;
-      const footerHeight = document.querySelector('tfoot').offsetHeight;
-
-      const availableHeight = window.innerHeight - controlHeight - headerHeight - footerHeight;
-      const tableRowsHeight = availableHeight / 8; // Divide o espaço disponível igualmente entre os 8 jogadores
-      document.querySelector('table').style.maxHeight = `${Math.max(tableRowsHeight * playerCount, availableHeight)}px`;
-    }
 
     function createRow(index) {
       const tr = document.createElement('tr');
@@ -264,7 +251,6 @@
       if (playerCount < maxPlayers) { // Limitar a 8 jogadores
         tableBody.appendChild(createRow(playerCount));
         playerCount++;
-        adjustTableHeight(); // Redimensionar a tabela para caber o novo jogador
         updateTotals();
       }
     }
@@ -273,7 +259,6 @@
       if (playerCount > 3) { // Impedir remoção se houver apenas 3 jogadores
         tableBody.deleteRow(playerCount - 1);
         playerCount--;
-        adjustTableHeight(); // Redimensionar a tabela para caber após a remoção
         updateTotals();
       }
     }
@@ -283,7 +268,6 @@
       tableBody.appendChild(createRow(i));
     }
     loadFromLocal();
-    adjustTableHeight(); // Ajustar a altura inicial da tabela
 
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
