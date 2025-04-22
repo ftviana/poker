@@ -42,22 +42,14 @@
         text-align: center; /* Centralizado o texto */
         border-bottom: 1px solid #eee;
       }
-      input[type="text"],
-      input[type="number"] {
+      input[type="text"] {
         width: 100%;
         padding: 0.8rem;
         font-size: 1rem; /* Ajustado o tamanho da fonte dos campos */
         border: 1px solid #ccc;
         border-radius: 6px;
         box-sizing: border-box;
-      }
-      input[type="number"]::-webkit-outer-spin-button,
-      input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      input[type="number"] {
-        -moz-appearance: textfield;
+        text-align: right; /* Centraliza o texto no campo */
       }
       tfoot td {
         font-weight: bold;
@@ -143,7 +135,7 @@
       const history = [];
       let historyIndex = -1;
       let playerCount = 3; // Começa com 3 jogadores
-      let maxPlayers = 7; // Limite de jogadores
+      let maxPlayers = 8; // Limite de jogadores
 
       function createRow(index) {
         const tr = document.createElement("tr");
@@ -160,8 +152,8 @@
 
         const tdBalance = document.createElement("td");
         const inputBalance = document.createElement("input");
-        inputBalance.type = "number";
-        inputBalance.inputMode = "decimal";
+        inputBalance.type = "text"; // Alterado para "text" para aceitar valores negativos
+        inputBalance.placeholder = "0.00";
         inputBalance.value = "";
         inputBalance.oninput = () => {
           saveState();
@@ -176,7 +168,7 @@
       }
 
       function updateTotals() {
-        const inputs = tableBody.querySelectorAll('input[type="number"]');
+        const inputs = tableBody.querySelectorAll('input[type="text"]');
         let totalPositivo = 0;
         let totalNegativo = 0;
 
